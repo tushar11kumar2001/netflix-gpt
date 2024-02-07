@@ -1,6 +1,13 @@
-# configuration of our app
+# Netflix GPT
   - npm create vite@latest
   - tailwind css configuration
+  - header
+  - login page
+  - email and password validation
+  - useRef
+  - sign in page
+  - signin hindi page
+  - create sign up user account
 
 
 # Features

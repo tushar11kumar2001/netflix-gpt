@@ -1,7 +1,10 @@
-
-
+import Body from "./components/Body"
 function App() {
- return (<h1 className="font-bold text-lg text-red-700">hello VITE</h1>)
+ return (
+  <>
+   <Body/>
+  </>
+ )
 }
 
 export default App
