@@ -12,7 +12,10 @@
   - Registration 
   - Registration hindi page 
   - regform page
-  - user sign up authentication 
+  - implement user signup/login authentication 
+  - install and config redux store
+  - configureStore appstore
+  - createSlice userSlice
 
 
 # Features

@@ -5,11 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { ROOT } from "../../route";
 import { auth } from "../utils/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
+
 const Login = () => {
   const navigate = useNavigate();
+  
   const email = useRef();
   const password = useRef();
   const [valid , setValid] = useState(null);
+
   const handlevalid = ()=>{
     const message = formValidation(email.current.value , password.current.value)
    setValid(message);
@@ -20,7 +23,6 @@ const Login = () => {
   .then((userCredential) => {
     // Signed in 
     const user = userCredential.user;
-    console.log(user);
     // ...
   })
   .catch((error) => {
