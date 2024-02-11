@@ -5,9 +5,14 @@
   - login page
   - email and password validation
   - useRef
+  - routing 
+      - useNavigate()
   - sign in page
   - signin hindi page
-  - create sign up user account
+  - Registration 
+  - Registration hindi page 
+  - regform page
+  - user sign up authentication 
 
 
 # Features

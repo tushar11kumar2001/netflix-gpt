@@ -1,0 +1,23 @@
+import React from 'react'
+import { useNavigate } from 'react-router-dom'
+import { ROOT} from '../../../route';
+const Header2 = ({btn}) => {
+    const navigate = useNavigate();
+  return (
+    <div>
+        <nav className="flex justify-between items-center pl-6 pr-16  border-b">
+        <img
+          className=" w-52 h-22 "
+          src="https://cdn.cookielaw.org/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png"
+          alt="netflix"
+        />
+        <p 
+        className="text-xl font-semibold cursor-pointer"
+        onClick={()=> navigate(ROOT.SIGNIN)}
+        >{btn}</p>
+      </nav>
+    </div>
+  )
+}
+
+export default Header2

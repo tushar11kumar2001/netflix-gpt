@@ -1,14 +1,33 @@
 import Header from "./Header";
 import formValidation from "../utils/formvalidation";
 import { useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { ROOT } from "../../route";
+import { auth } from "../utils/firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
 const Login = () => {
+  const navigate = useNavigate();
   const email = useRef();
   const password = useRef();
   const [valid , setValid] = useState(null);
   const handlevalid = ()=>{
-    const result = formValidation(email.current.value , password.current.value)
-   setValid(result);
+    const message = formValidation(email.current.value , password.current.value)
+   setValid(message);
+   if(message) return;
+
+   //login logic
+   signInWithEmailAndPassword(auth, email.current.value , password.current.value)
+  .then((userCredential) => {
+    // Signed in 
+    const user = userCredential.user;
+    console.log(user);
+    // ...
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    setValid(errorCode+errorMessage);
+  });
 
   }
   return (
@@ -35,6 +54,7 @@ const Login = () => {
           className="w-full p-4 my-4 bg-gray-600 rounded-lg"
           type="password"
           placeholder="Password"
+          
         />
         <p className="text-red-600 font-medium">{valid}</p>
         <button 
@@ -44,7 +64,7 @@ const Login = () => {
           Sign In
         </button>
         
-        <p className="py-4">New to Netflix?<Link to="/in/"> Sign Up Now</Link></p>
+        <p className="py-4">New to Netflix? <span className="cursor-pointer font-medium" onClick={()=>{navigate(ROOT.SIGNUP)}}>Sign Up Now</span></p>
       </form>
     </div>
   );
