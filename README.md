@@ -16,6 +16,8 @@
   - install and config redux store
   - configureStore appstore
   - createSlice userSlice
+  - sign out
+  
 
 
 # Features

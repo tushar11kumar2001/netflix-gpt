@@ -5,14 +5,16 @@ import { useNavigate } from "react-router-dom";
 import { ROOT } from "../../route";
 import { auth } from "../utils/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { useSelector } from "react-redux";
 
 const Login = () => {
   const navigate = useNavigate();
-  
+  // const loggedInUser = useSelector(store=>store.user);
   const email = useRef();
   const password = useRef();
   const [valid , setValid] = useState(null);
 
+  // console.log("loggedinuser" , loggedInUser);
   const handlevalid = ()=>{
     const message = formValidation(email.current.value , password.current.value)
    setValid(message);
@@ -23,6 +25,12 @@ const Login = () => {
   .then((userCredential) => {
     // Signed in 
     const user = userCredential.user;
+    // console.log(user);
+    const token = user.uid;
+    sessionStorage.setItem("authuid" , token);
+    // const token2 = sessionStorage.getItem("authuid");
+    // console.log("token2" , token2);
+    navigate(ROOT.BROWSER);
     // ...
   })
   .catch((error) => {
@@ -30,6 +38,9 @@ const Login = () => {
     const errorMessage = error.message;
     setValid(errorCode+errorMessage);
   });
+ 
+ 
+    // console.log("loggedinuser" , loggedInUser);
 
   }
   return (

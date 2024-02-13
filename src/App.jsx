@@ -11,23 +11,25 @@ import { useEffect, useState } from "react"
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./utils/firebase";
 import {addUser,removeUser} from "./redux/userSlice"
-
 import { useDispatch } from "react-redux"
+import Browser from "./components/browser/browser"
+
 
 function App() {
+
+   const [uid,setUid] = useState();
     const [email,setEmail] = useState("");
     const dispatch = useDispatch();
     useEffect(()=>{
         onAuthStateChanged(auth, (user) => {
           if (user) {
-            // User is signed in, see docs for a list of available properties
-            // https://firebase.google.com/docs/reference/js/auth.user
           const{displayName,email,uid} = user;
-          dispatch(addUser({displayName,email,uid}));
+          dispatch(addUser({displayName:displayName,email:email,uid:uid}));
+          setUid(sessionStorage.getItem("authuid"));
             // ...
           } else {
-            // User is signed out
             dispatch(removeUser());
+            console.log("signout");
           }
         });
     },[])
@@ -41,6 +43,8 @@ function App() {
     <Route path="/signup/registration" element= {<Registration/>}/>,
     <Route path="/signup/registration-hi" element= {<RegistrationHI/>}/>,
     <Route path="/signup/regform" element= {<RegistrationForm/>}/>,
+    <Route path="/browser" element= {uid?<Browser/>:<Login/>}/>,
+
    </Routes>
    </EmailContext.Provider>
   </>

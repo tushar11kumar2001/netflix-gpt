@@ -5,4 +5,5 @@ export const ROOT = {
     REGISTRATION: "/signup/registration",
     REGISTRATIONHI: "/signup/registration-hi",
     SIGNUPFORM: "/signup/regform",
+    BROWSER: "/browser"
 }
