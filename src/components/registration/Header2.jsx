@@ -6,12 +6,12 @@ import { auth } from "../../utils/firebase";
 const Header2 = ({ btn }) => {
   const navigate = useNavigate();
   function handleClick() {
-    if(btn === "Sign In")  navigate(ROOT.SIGNIN);
+    if(btn === "Sign In")  navigate(ROOT.LOGIN);
     else {
     signOut(auth)
       .then(() => {
         // Sign-out successful.
-       navigate(ROOT.SIGNIN)
+       navigate(ROOT.LOGIN)
       })
       .catch((error) => {
         // An error happened.

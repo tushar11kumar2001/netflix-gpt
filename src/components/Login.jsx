@@ -1,5 +1,6 @@
 import Header from "./Header";
 import formValidation from "../utils/formvalidation";
+import Browser from "./browser/browser";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROOT } from "../../route";
@@ -9,77 +10,92 @@ import { useSelector } from "react-redux";
 
 const Login = () => {
   const navigate = useNavigate();
-  // const loggedInUser = useSelector(store=>store.user);
   const email = useRef();
   const password = useRef();
-  const [valid , setValid] = useState(null);
+  const [valid, setValid] = useState(null);
+  const userObj = useSelector((store) => store.user);
 
-  // console.log("loggedinuser" , loggedInUser);
-  const handlevalid = ()=>{
-    const message = formValidation(email.current.value , password.current.value)
-   setValid(message);
-   if(message) return;
+  const handlevalid = () => {
+    const message = formValidation(email.current.value, password.current.value);
+    setValid(message);
+    if (message) return;
 
-   //login logic
-   signInWithEmailAndPassword(auth, email.current.value , password.current.value)
-  .then((userCredential) => {
-    // Signed in 
-    const user = userCredential.user;
-    // console.log(user);
-    const token = user.uid;
-    sessionStorage.setItem("authuid" , token);
-    // const token2 = sessionStorage.getItem("authuid");
-    // console.log("token2" , token2);
-    navigate(ROOT.BROWSER);
-    // ...
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    setValid(errorCode+errorMessage);
-  });
- 
- 
-    // console.log("loggedinuser" , loggedInUser);
+    //login logic
+    signInWithEmailAndPassword(
+      auth,
+      email.current.value,
+      password.current.value
+    )
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
 
-  }
+        navigate(ROOT.BROWSER);
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        setValid(errorCode + errorMessage);
+      });
+  };
   return (
-    <div className="">
-      <Header />
-      <div className="absolute">
-        <img
-          className=""
-          src="https://assets.nflxext.com/ffe/siteui/vlv3/4da5d2b1-1b22-498d-90c0-4d86701dffcc/98a1cb1e-5a1d-4b98-a46f-995272b632dd/IN-en-20240129-popsignuptwoweeks-perspective_alpha_website_small.jpg"
-          alt="logo"
-        />
-      </div>
+    <>
+      {userObj?.uid ? (
+        <Browser />
+      ) : (
+        <div className="">
+          <Header />
+          <div className="absolute">
+            <img
+              className=""
+              src="https://assets.nflxext.com/ffe/siteui/vlv3/4da5d2b1-1b22-498d-90c0-4d86701dffcc/98a1cb1e-5a1d-4b98-a46f-995272b632dd/IN-en-20240129-popsignuptwoweeks-perspective_alpha_website_small.jpg"
+              alt="logo"
+            />
+          </div>
 
-      <form onSubmit = {(e)=>{e.preventDefault()}}className="bg-black absolute w-3/12 my-36 mx-auto left-0 right-0 p-12 text-white bg-opacity-80 rounded-lg z-20">
-        <h1 className="font-medium mb-6 text-3xl">Sign In</h1>
-        <input
-          ref={email}
-          className="w-full p-4 my-4 bg-gray-600 rounded-lg"
-          type="text"
-          placeholder="Email Address"
-        />
-        <input
-        ref={password}
-          className="w-full p-4 my-4 bg-gray-600 rounded-lg"
-          type="password"
-          placeholder="Password"
-          
-        />
-        <p className="text-red-600 font-medium">{valid}</p>
-        <button 
-        className="w-full p-4 my-6 bg-red-600 rounded-lg "
-        onClick = {handlevalid}
-        >
-          Sign In
-        </button>
-        
-        <p className="py-4">New to Netflix? <span className="cursor-pointer font-medium" onClick={()=>{navigate(ROOT.SIGNUP)}}>Sign Up Now</span></p>
-      </form>
-    </div>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+            }}
+            className="bg-black absolute w-3/12 my-36 mx-auto left-0 right-0 p-12 text-white bg-opacity-80 rounded-lg z-20"
+          >
+            <h1 className="font-medium mb-6 text-3xl">Sign In</h1>
+            <input
+              ref={email}
+              className="w-full p-4 my-4 bg-gray-600 rounded-lg"
+              type="text"
+              placeholder="Email Address"
+            />
+            <input
+              ref={password}
+              className="w-full p-4 my-4 bg-gray-600 rounded-lg"
+              type="password"
+              placeholder="Password"
+            />
+            <p className="text-red-600 font-medium">{valid}</p>
+            <button
+              className="w-full p-4 my-6 bg-red-600 rounded-lg "
+              onClick={handlevalid}
+            >
+              Sign In
+            </button>
+
+            <p className="py-4">
+              New to Netflix?{" "}
+              <span
+                className="cursor-pointer font-medium"
+                onClick={() => {
+                  navigate(ROOT.SIGNUP);
+                }}
+              >
+                Sign Up Now
+              </span>
+            </p>
+          </form>
+        </div>
+      )}
+    </>
   );
 };
 

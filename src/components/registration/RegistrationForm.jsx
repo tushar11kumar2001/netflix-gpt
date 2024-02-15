@@ -4,7 +4,7 @@ import { EmailContext } from "../../utils/emailContext";
 import { useContext } from "react";
 import formValidation from "../../utils/formvalidation";
 import { auth } from "../../utils/firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { updateProfile } from "firebase/auth";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -47,6 +47,11 @@ const RegistrationForm = () => {
           })
           .catch((error) => {
             // An error occurred
+          });
+
+          sendEmailVerification(user)
+          .then(() => {
+            alert("verification done");
           });
 
         
@@ -126,7 +131,7 @@ const RegistrationForm = () => {
           <button
             className="h-16 bg-red-700 rounded text-white font-normal text-2xl"
             onClick={() => {
-              navigate(ROOT.SIGNIN);
+              navigate(ROOT.LOGIN);
             }}
           >
             Continue

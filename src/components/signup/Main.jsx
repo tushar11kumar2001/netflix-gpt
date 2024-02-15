@@ -36,7 +36,7 @@ const Main = ({lang,sign,heading,para1,para2,btn}) => {
         <button
           className="px-3 py-1.5 bg-red-600 text-white rounded-md cursor-pointer"
           onClick={() => {
-            navigate(ROOT.SIGNIN);
+            navigate(ROOT.LOGIN);
           }}
         >
           {sign}

@@ -17,7 +17,7 @@
   - configureStore appstore
   - createSlice userSlice
   - sign out
-  
+  - add email verification 
 
 
 # Features

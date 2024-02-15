@@ -1,55 +1,36 @@
-import React, { useEffect, useState } from 'react'
-import {  useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { ROOT } from '../../../route';
-import { auth } from '../../utils/firebase';
-import { onAuthStateChanged } from "firebase/auth";
+import { useSelector } from "react-redux";
+import { auth } from "../../utils/firebase";
 import { signOut } from "firebase/auth";
-
+import Login from "../Login";
+import { useNavigate } from "react-router-dom";
+import { ROOT } from "../../../route";
 
 const Browser = () => {
-const navigate = useNavigate();
+    const navigate = useNavigate();
+  const userobj = useSelector((store) => store.user);
 
-function handlelogout(){
-    // console.log("handlelogout");
-signOut(auth).then(() => {
-  // Sign-out successful.
-  sessionStorage.clear();
-  navigate(ROOT.SIGNIN);
-}).catch((error) => {
-  // An error happened.
-});
+  function handlelogout() {
+    signOut(auth)
+      .then(() => {
+        navigate(ROOT.LOGIN);
+      })
+      .catch((error) => {
+        // An error happened.
+      });
   }
 
-
-
-    // const [loggedInUser,setloggedIn] = useState();
-    // useEffect(()=>{
-    //     console.log("loggedinuser browser" , loggedInUser);
-    // },[loggedInUser])
-    // useEffect(()=>{
-    //     onAuthStateChanged(auth, (user) => {
-    //         if (user) {
-    //           // User is signed in, see docs for a list of available properties
-    //           // https://firebase.google.com/docs/reference/js/auth.user
-    //         setloggedIn(user);
-    //           // ...
-    //         } else {
-    //           // User is signed out
-    //           navigate(ROOT.SIGNIN);
-    //         }
-    //       });
-    // },[])
-
-   
-    
-return (
-    <div>
-        <div>INside browser</div>
-        <button onClick={handlelogout}>signout</button>
-    </div>
-)
-  
-}
+  return (
+    <>
+      {userobj?.uid ? (
+        <>
+          <div>INside browser {userobj?.displayName}</div>
+          <button onClick={handlelogout}>signout</button>
+        </>
+      ) : (
+       <Login/>
+      )}
+    </>
+  );
+};
 
 export default Browser;
