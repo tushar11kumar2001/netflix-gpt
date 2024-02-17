@@ -1,6 +1,6 @@
 import Header from "./Header";
 import formValidation from "../utils/formvalidation";
-import Browser from "./browser/browser";
+import Browser from "./browser/Browser";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROOT } from "../../route";

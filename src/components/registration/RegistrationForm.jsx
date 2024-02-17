@@ -6,8 +6,9 @@ import formValidation from "../../utils/formvalidation";
 import { auth } from "../../utils/firebase";
 import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { updateProfile } from "firebase/auth";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { addUser } from "../../redux/userSlice";
 import { ROOT } from "../../../route";
 
 const RegistrationForm = () => {
@@ -20,6 +21,7 @@ const RegistrationForm = () => {
   const nameref = useRef(null);
   const navigate = useNavigate();
   const userobj = useSelector((store) => store.user);
+  const dispatch = useDispatch();
   // console.log("username ",userobj);
 
   function handleValid() {
@@ -44,6 +46,8 @@ const RegistrationForm = () => {
         })
           .then(() => {
             // Profile updated!
+            const{displayName,email,uid} = auth.currentUser;
+            dispatch(addUser({displayName:displayName,email:email,uid:uid}));
           })
           .catch((error) => {
             // An error occurred

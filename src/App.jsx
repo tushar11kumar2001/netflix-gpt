@@ -12,7 +12,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./utils/firebase";
 import {addUser,removeUser} from "./redux/userSlice"
 import { useDispatch, useSelector } from "react-redux"
-import Browser from "./components/browser/browser"
+import Browser from "./components/browser/Browser"
 
 
 function App() {
