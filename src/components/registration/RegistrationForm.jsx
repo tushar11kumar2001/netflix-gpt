@@ -4,12 +4,16 @@ import { EmailContext } from "../../utils/emailContext";
 import { useContext } from "react";
 import formValidation from "../../utils/formvalidation";
 import { auth } from "../../utils/firebase";
-import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
 import { updateProfile } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { addUser } from "../../redux/userSlice";
 import { ROOT } from "../../../route";
+import { profileLogoURL } from "../../utils/constant";
 
 const RegistrationForm = () => {
   const { email } = useContext(EmailContext);
@@ -40,26 +44,29 @@ const RegistrationForm = () => {
     )
       .then((userCredential) => {
         // Signed up
+        // console.log("createUserWithEmail");
         const user = userCredential.user;
         updateProfile(user, {
           displayName: nameref.current.value,
+          photoURL: profileLogoURL,
         })
           .then(() => {
             // Profile updated!
-            const{displayName,email,uid} = auth.currentUser;
-            dispatch(addUser({displayName:displayName,email:email,uid:uid}));
+            // console.log("updateProfile");
+            const { displayName, email, uid, photoURL } = auth.currentUser;
+            dispatch(
+              addUser({ displayName: displayName, email: email, photoURL:photoURL ,uid: uid })
+            );
           })
           .catch((error) => {
             // An error occurred
           });
 
-          sendEmailVerification(user)
-          .then(() => {
-            alert("verification done");
-          });
+        sendEmailVerification(user).then(() => {
+          alert("verification done");
+        });
 
-        
-        // navigate(ROOT.SIGNIN);  
+        // navigate(ROOT.SIGNIN);
         setHide(true);
       })
       .catch((error) => {
@@ -135,7 +142,7 @@ const RegistrationForm = () => {
           <button
             className="h-16 bg-red-700 rounded text-white font-normal text-2xl"
             onClick={() => {
-              navigate(ROOT.LOGIN);
+              navigate(ROOT.BROWSER);
             }}
           >
             Continue

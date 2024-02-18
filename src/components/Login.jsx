@@ -7,6 +7,7 @@ import { ROOT } from "../../route";
 import { auth } from "../utils/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useSelector } from "react-redux";
+import { backgroundLogoURL } from "../utils/constant";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -47,11 +48,7 @@ const Login = () => {
         <div className="">
           <Header />
           <div className="absolute">
-            <img
-              className=""
-              src="https://assets.nflxext.com/ffe/siteui/vlv3/4da5d2b1-1b22-498d-90c0-4d86701dffcc/98a1cb1e-5a1d-4b98-a46f-995272b632dd/IN-en-20240129-popsignuptwoweeks-perspective_alpha_website_small.jpg"
-              alt="logo"
-            />
+            <img className="" src={backgroundLogoURL} alt="background image" />
           </div>
 
           <form
