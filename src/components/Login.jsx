@@ -1,7 +1,7 @@
 import Header from "./Header";
 import formValidation from "../utils/formvalidation";
 import Browser from "./browser/Browser";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROOT } from "../../route";
 import { auth } from "../utils/firebase";
@@ -15,6 +15,8 @@ const Login = () => {
   const password = useRef();
   const [valid, setValid] = useState(null);
   const userObj = useSelector((store) => store.user);
+
+  useEffect(()=>{ if(userObj?.uid) navigate(ROOT.BROWSER) },[userObj])
 
   const handlevalid = () => {
     const message = formValidation(email.current.value, password.current.value);
@@ -41,10 +43,7 @@ const Login = () => {
       });
   };
   return (
-    <>
-      {userObj?.uid ? (
-        <Browser />
-      ) : (
+
         <div className="">
           <Header />
           <div className="absolute">
@@ -91,8 +90,7 @@ const Login = () => {
             </p>
           </form>
         </div>
-      )}
-    </>
+
   );
 };
 
