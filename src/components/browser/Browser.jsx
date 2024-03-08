@@ -1,27 +1,34 @@
 import { useSelector } from "react-redux";
-import { auth } from "../../utils/firebase";
+import { auth, fiebaseStorage, firebaseStore } from "../../utils/firebase";
 import { signOut } from "firebase/auth";
-import Login from "../Login";
 import { useNavigate } from "react-router-dom";
 import { ROOT } from "../../../route";
 import { logoURL, profileLogoURL } from "../../utils/constant";
-import { useEffect } from "react";
-
+import { useEffect, useState } from "react";
+import { getDownloadURL,ref } from "firebase/storage";
+import { collection,getDocs,query,where } from "firebase/firestore";
 const Browser = () => {
   const navigate = useNavigate();
   const userobj = useSelector((store) => store.user);
-
+  const [photoURL, setPhotoURL] = useState(null)
   useEffect(() => { if (!userobj?.uid) navigate(ROOT.LOGIN)}, [userobj]);
-  
-  function handlelogout() {
-    signOut(auth)
-      .then(() => {
-        navigate(ROOT.LOGIN);
-      })
-      .catch((error) => {
-        // An error happened.
-      });
+  useEffect(()=>{
+    getUser().then(result=>getImageURL(result.docs[0].data().imageURL).then(result=>setPhotoURL(result)));
+  },[])
+
+  //get user
+  const getUser = async ()=>{
+     const collectionRef = collection(firebaseStore,"users");
+     const q = query(collectionRef,where('uid','==',userobj.uid));
+    return  await getDocs(q);
   }
+
+  //get image
+  const getImageURL = (path)=>{
+    return getDownloadURL(ref(fiebaseStorage,path));
+  }
+
+  function handlelogout() {signOut(auth).then(() => {navigate(ROOT.LOGIN)})}
 
   return (
     <>
@@ -32,9 +39,9 @@ const Browser = () => {
       <div className=" fixed  right-14 top-4 group cursor-pointer flex flex-col items-end ">
         <div>
           <img
-            src={profileLogoURL}
+            src={photoURL?photoURL:profileLogoURL}
             alt="profile logo"
-            className="inline mr-2 rounded w-9"
+            className="inline mr-2 rounded w-9 h-9"
           />
           <span>
             <i className="fa-solid fa-caret-down group-hover:rotate-180 duration-300"></i>
@@ -42,7 +49,7 @@ const Browser = () => {
         </div>
         <ul className=" border border-white w-44 bg-black bg-opacity-70 text-white mt-4 hidden group-hover:block">
           <li className=" py-3 pl-3 hover:text-lg">
-            <img src={userobj?.photoURL} />
+            <img src={photoURL?photoURL:profileLogoURL} className="w-10 h-10 rounded" />
             {userobj?.displayName}
           </li>
           <li className=" py-3 pl-3 hover:text-lg">Manage Profile</li>

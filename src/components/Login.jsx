@@ -14,10 +14,13 @@ const Login = () => {
   const email = useRef();
   const password = useRef();
   const [valid, setValid] = useState(null);
+  const [showPassword,setShowPassword] = useState(false);
   const userObj = useSelector((store) => store.user);
 
   useEffect(()=>{ if(userObj?.uid) navigate(ROOT.BROWSER) },[userObj])
-
+  const handleShowPassword = ()=>{
+    setShowPassword(!showPassword)
+  }
   const handlevalid = () => {
     const message = formValidation(email.current.value, password.current.value);
     setValid(message);
@@ -59,16 +62,20 @@ const Login = () => {
             <h1 className="font-medium mb-6 text-3xl">Sign In</h1>
             <input
               ref={email}
-              className="w-full p-4 my-4 bg-gray-600 rounded-lg"
+              className="w-full p-4 my-4 bg-gray-600 rounded-lg outline-none hover:border-2 border-red-800"
               type="text"
               placeholder="Email Address"
             />
+            <div className="flex justify-between items-center pr-3  w-full  my-4 bg-gray-600 rounded-lg hover:border-2 border-red-800">
             <input
               ref={password}
-              className="w-full p-4 my-4 bg-gray-600 rounded-lg"
-              type="password"
+              className="p-4 w-11/12  bg-gray-600 rounded-lg outline-none "
+              type={showPassword?"text":"password"}
               placeholder="Password"
             />
+            {showPassword?<i className="fa-solid fa-eye-slash cursor-pointer" onClick={handleShowPassword}></i>: <i className="fa-solid fa-eye cursor-pointer" onClick={handleShowPassword}></i>}
+           
+            </div>
             <p className="text-red-600 font-medium">{valid}</p>
             <button
               className="w-full p-4 my-6 bg-red-600 rounded-lg "

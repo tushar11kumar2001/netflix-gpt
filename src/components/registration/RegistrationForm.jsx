@@ -3,11 +3,13 @@ import Header2 from "./Header2";
 import { EmailContext } from "../../utils/emailContext";
 import { useContext } from "react";
 import formValidation from "../../utils/formvalidation";
-import { auth } from "../../utils/firebase";
+import { auth, fiebaseStorage, firebaseStore } from "../../utils/firebase";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
 } from "firebase/auth";
+import { collection, addDoc } from "firebase/firestore"; 
+import { ref, uploadBytes } from "firebase/storage";
 import { updateProfile } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -21,17 +23,17 @@ const RegistrationForm = () => {
   const [isvalid, setValid] = useState(null);
   const [hide, setHide] = useState(false);
   const emailref = useRef(null);
-  const passwordref = useRef(null);
+  const [password,setPassword] = useState(null);
   const nameref = useRef(null);
   const navigate = useNavigate();
   const userobj = useSelector((store) => store.user);
   const dispatch = useDispatch();
-  // console.log("username ",userobj);
+  const [profileImg,setProfileImg] = useState(null);
 
   function handleValid() {
     const message = formValidation(
       emailref.current.value,
-      passwordref.current.value
+      password
     );
     setValid(message);
     if (message) return;
@@ -40,23 +42,19 @@ const RegistrationForm = () => {
     createUserWithEmailAndPassword(
       auth,
       emailref.current.value,
-      passwordref.current.value
+      password
     )
       .then((userCredential) => {
-        // Signed up
-        // console.log("createUserWithEmail");
         const user = userCredential.user;
         updateProfile(user, {
           displayName: nameref.current.value,
           photoURL: profileLogoURL,
         })
           .then(() => {
-            // Profile updated!
-            // console.log("updateProfile");
             const { displayName, email, uid, photoURL } = auth.currentUser;
-            dispatch(
-              addUser({ displayName: displayName, email: email, photoURL:photoURL ,uid: uid })
-            );
+            dispatch(addUser({ displayName: displayName, email: email, photoURL:photoURL ,uid: uid }));
+            addDataToFireStore(displayName,email,uid,password,profileImg);
+            
           })
           .catch((error) => {
             // An error occurred
@@ -65,8 +63,6 @@ const RegistrationForm = () => {
         sendEmailVerification(user).then(() => {
           alert("verification done");
         });
-
-        // navigate(ROOT.SIGNIN);
         setHide(true);
       })
       .catch((error) => {
@@ -78,6 +74,19 @@ const RegistrationForm = () => {
     //
   }
 
+  const  addDataToFireStore = async (name,email,uid,password, profileImg)=>{
+      const imageRef = ref(fiebaseStorage,`uploads/images/${Date.now()}-${profileImg.name}`);
+      const uploadResult = await uploadBytes(imageRef, profileImg);
+      return await addDoc(collection(firebaseStore,'users'),{
+       username:name,
+       email:email,
+       uid:uid,
+       password:password,
+       imageURL:uploadResult.ref.fullPath,
+      })
+
+ 
+  }
   return (
     <div>
       <Header2 btn={hide === false ? "Sign In" : "Sign Out"} />
@@ -110,12 +119,14 @@ const RegistrationForm = () => {
               }}
             />
             <input
-              ref={passwordref}
+              onChange={(e)=>setPassword(e.target.value)}
               type="password"
               className="border border-black h-12 rounded px-3"
               placeholder="Add a password"
             />
             <p className="text-red-600 font-medium">{isvalid}</p>
+            <input type="file" onChange={(e)=> setProfileImg(e.target.files[0])}/>
+
             <button
               className="h-16 bg-red-700 rounded text-white font-normal text-2xl"
               onClick={handleValid}
