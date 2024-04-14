@@ -1,15 +1,14 @@
 import Header from "./Header";
 import formValidation from "../utils/formvalidation";
-import Browser from "./browser/Browser";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROOT } from "../../route";
-import { auth } from "../utils/firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { useFirebaseContext } from "../utils/firebase.jsx";
 import { useSelector } from "react-redux";
 import { backgroundLogoURL } from "../utils/constant";
 
 const Login = () => {
+  const firebaseContext = useFirebaseContext();
   const navigate = useNavigate();
   const email = useRef();
   const password = useRef();
@@ -25,25 +24,8 @@ const Login = () => {
     const message = formValidation(email.current.value, password.current.value);
     setValid(message);
     if (message) return;
-
-    //login logic
-    signInWithEmailAndPassword(
-      auth,
-      email.current.value,
-      password.current.value
-    )
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-
-        navigate(ROOT.BROWSER);
-        // ...
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        setValid(errorCode + errorMessage);
-      });
+    firebaseContext.login(email.current.value,password.current.value,setValid);
+    
   };
   return (
 

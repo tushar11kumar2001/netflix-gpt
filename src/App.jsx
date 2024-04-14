@@ -7,26 +7,15 @@ import RegistrationHI from "./components/registration/RegistrationHI";
 import RegistrationForm from "./components/registration/RegistrationForm";
 import { EmailContext } from "./utils/emailContext";
 import { useEffect, useState } from "react";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "./utils/firebase";
-import { addUser, removeUser } from "./redux/userSlice";
-import { useDispatch, useSelector } from "react-redux";
 import Browser from "./components/browser/Browser";
+import { useFirebaseContext } from "./utils/firebase";
 
 function App() {
   const [email, setEmail] = useState("");
-  const dispatch = useDispatch();
+  const firebaseContext = useFirebaseContext();
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // console.log("onauthStateChanged");
-        const { displayName, email, uid } = user;
-        dispatch(addUser({ displayName: displayName, email: email, uid: uid }));
-      } else {
-        dispatch(removeUser());
-      }
-    });
+  firebaseContext.authChanged();
   }, []);
   return (
     <>

@@ -1,21 +1,14 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { ROOT } from "../../../route";
-import { signOut } from "firebase/auth";
-import { auth } from "../../utils/firebase";
+import { useFirebaseContext } from "../../utils/firebase.jsx";
 const Header2 = ({ btn }) => {
   const navigate = useNavigate();
+  const firebaseContext = useFirebaseContext();
   function handleClick() {
     if(btn === "Sign In")  navigate(ROOT.LOGIN);
     else {
-    signOut(auth)
-      .then(() => {
-        // Sign-out successful.
-       navigate(ROOT.LOGIN)
-      })
-      .catch((error) => {
-        // An error happened.
-      });
+    firebaseContext.logout();
     }
   }
   return (

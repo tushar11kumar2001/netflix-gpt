@@ -3,21 +3,17 @@ import Header2 from "./Header2";
 import { EmailContext } from "../../utils/emailContext";
 import { useContext } from "react";
 import formValidation from "../../utils/formvalidation";
-import { auth, fiebaseStorage, firebaseStore } from "../../utils/firebase";
-import {
-  createUserWithEmailAndPassword,
-  sendEmailVerification,
-} from "firebase/auth";
-import { collection, addDoc } from "firebase/firestore"; 
-import { ref, uploadBytes } from "firebase/storage";
-import { updateProfile } from "firebase/auth";
+
+
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { addUser } from "../../redux/userSlice";
+
 import { ROOT } from "../../../route";
-import { profileLogoURL } from "../../utils/constant";
+import { useFirebaseContext } from "../../utils/firebase";
+
 
 const RegistrationForm = () => {
+  const firebaseContext = useFirebaseContext();
   const { email } = useContext(EmailContext);
   const [useremail, setUserEmail] = useState(email);
   const [isvalid, setValid] = useState(null);
@@ -39,54 +35,9 @@ const RegistrationForm = () => {
     if (message) return;
 
     //sign up logic
-    createUserWithEmailAndPassword(
-      auth,
-      emailref.current.value,
-      password
-    )
-      .then((userCredential) => {
-        const user = userCredential.user;
-        updateProfile(user, {
-          displayName: nameref.current.value,
-          photoURL: profileLogoURL,
-        })
-          .then(() => {
-            const { displayName, email, uid, photoURL } = auth.currentUser;
-            dispatch(addUser({ displayName: displayName, email: email, photoURL:photoURL ,uid: uid }));
-            addDataToFireStore(displayName,email,uid,password,profileImg);
-            
-          })
-          .catch((error) => {
-            // An error occurred
-          });
-
-        sendEmailVerification(user).then(() => {
-          alert("verification done");
-        });
-        setHide(true);
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        setValid(errorCode + errorMessage);
-        // ..
-      });
-    //
+    firebaseContext.createNewUser(emailref.current.value,password,nameref.current.value,profileImg,setHide,setValid)
   }
 
-  const  addDataToFireStore = async (name,email,uid,password, profileImg)=>{
-      const imageRef = ref(fiebaseStorage,`uploads/images/${Date.now()}-${profileImg.name}`);
-      const uploadResult = await uploadBytes(imageRef, profileImg);
-      return await addDoc(collection(firebaseStore,'users'),{
-       username:name,
-       email:email,
-       uid:uid,
-       password:password,
-       imageURL:uploadResult.ref.fullPath,
-      })
-
- 
-  }
   return (
     <div>
       <Header2 btn={hide === false ? "Sign In" : "Sign Out"} />
@@ -125,7 +76,8 @@ const RegistrationForm = () => {
               placeholder="Add a password"
             />
             <p className="text-red-600 font-medium">{isvalid}</p>
-            <input type="file" onChange={(e)=> setProfileImg(e.target.files[0])}/>
+            <label htmlFor="profileImg001">Add profile image</label>
+            <input type="file" id="profileImg001" onChange={(e)=> setProfileImg(e.target.files[0])} />
 
             <button
               className="h-16 bg-red-700 rounded text-white font-normal text-2xl"

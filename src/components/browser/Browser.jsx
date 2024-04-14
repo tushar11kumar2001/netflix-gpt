@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { auth, fiebaseStorage, firebaseStore } from "../../utils/firebase";
+import { auth, fiebaseStorage, firebaseStore, useFirebaseContext } from "../../utils/firebase";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { ROOT } from "../../../route";
@@ -8,27 +8,18 @@ import { useEffect, useState } from "react";
 import { getDownloadURL,ref } from "firebase/storage";
 import { collection,getDocs,query,where } from "firebase/firestore";
 const Browser = () => {
+  const firebaseContext = useFirebaseContext()
   const navigate = useNavigate();
   const userobj = useSelector((store) => store.user);
   const [photoURL, setPhotoURL] = useState(null)
   useEffect(() => { if (!userobj?.uid) navigate(ROOT.LOGIN)}, [userobj]);
   useEffect(()=>{
-    getUser().then(result=>getImageURL(result.docs[0].data().imageURL).then(result=>setPhotoURL(result)));
+    firebaseContext.getUser(userobj.uid).then(result=>firebaseContext.getImageURL(result?.docs[0]?.data()?.imageURL).then(result=>setPhotoURL(result)));
   },[])
 
-  //get user
-  const getUser = async ()=>{
-     const collectionRef = collection(firebaseStore,"users");
-     const q = query(collectionRef,where('uid','==',userobj.uid));
-    return  await getDocs(q);
-  }
 
-  //get image
-  const getImageURL = (path)=>{
-    return getDownloadURL(ref(fiebaseStorage,path));
-  }
 
-  function handlelogout() {signOut(auth).then(() => {navigate(ROOT.LOGIN)})}
+  function handlelogout() {firebaseContext.logout()}
 
   return (
     <>
