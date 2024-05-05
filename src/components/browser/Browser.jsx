@@ -1,20 +1,24 @@
-import { useSelector } from "react-redux";
-import { auth, fiebaseStorage, firebaseStore, useFirebaseContext } from "../../utils/firebase";
-import { signOut } from "firebase/auth";
+import { useDispatch, useSelector } from "react-redux";
+import { useFirebaseContext } from "../../utils/firebaseContext";
 import { useNavigate } from "react-router-dom";
 import { ROOT } from "../../../route";
 import { logoURL, profileLogoURL } from "../../utils/constant";
 import { useEffect, useState } from "react";
-import { getDownloadURL,ref } from "firebase/storage";
-import { collection,getDocs,query,where } from "firebase/firestore";
+import { getNowPlayingMovies } from "../../utils/getNowPlayingMovies";
+import { nowPlayingMoviesListThunks } from "../../redux/nowPlayingMoviesSlice";
 const Browser = () => {
+  const dispatch = useDispatch();
   const firebaseContext = useFirebaseContext()
   const navigate = useNavigate();
   const userobj = useSelector((store) => store.user);
   const [photoURL, setPhotoURL] = useState(null)
   useEffect(() => { if (!userobj?.uid) navigate(ROOT.LOGIN)}, [userobj]);
   useEffect(()=>{
-    firebaseContext.getUser(userobj.uid).then(result=>firebaseContext.getImageURL(result?.docs[0]?.data()?.imageURL).then(result=>setPhotoURL(result)));
+    firebaseContext.getUser(userobj.uid)
+    .then(result=>firebaseContext.getImageURL(result?.docs[0]?.data()?.imageURL)
+    .then(result=>setPhotoURL(result)));
+    
+    dispatch(nowPlayingMoviesListThunks())
   },[])
 
 

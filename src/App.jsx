@@ -8,7 +8,7 @@ import RegistrationForm from "./components/registration/RegistrationForm";
 import { EmailContext } from "./utils/emailContext";
 import { useEffect, useState } from "react";
 import Browser from "./components/browser/Browser";
-import { useFirebaseContext } from "./utils/firebase";
+import { useFirebaseContext } from "./utils/firebaseContext";
 
 function App() {
   const [email, setEmail] = useState("");

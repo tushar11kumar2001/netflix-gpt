@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { ROOT } from "../../../route";
-import { useFirebaseContext } from "../../utils/firebase";
+import { useFirebaseContext } from "../../utils/firebaseContext";
 
 
 const RegistrationForm = () => {
@@ -23,7 +23,7 @@ const RegistrationForm = () => {
   const nameref = useRef(null);
   const navigate = useNavigate();
   const userobj = useSelector((store) => store.user);
-  const dispatch = useDispatch();
+ 
   const [profileImg,setProfileImg] = useState(null);
 
   function handleValid() {

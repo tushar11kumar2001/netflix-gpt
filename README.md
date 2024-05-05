@@ -18,6 +18,8 @@
   - createSlice userSlice
   - sign out
   - add email verification 
+  - Register TMDB API & create an app & get access token
+  - Get Data from TMDB now playing movies list API
 
 
 # Features

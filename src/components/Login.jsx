@@ -3,7 +3,7 @@ import formValidation from "../utils/formvalidation";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROOT } from "../../route";
-import { useFirebaseContext } from "../utils/firebase.jsx";
+import { useFirebaseContext } from "../utils/firebaseContext.jsx";
 import { useSelector } from "react-redux";
 import { backgroundLogoURL } from "../utils/constant";
 

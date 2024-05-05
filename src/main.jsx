@@ -5,7 +5,7 @@ import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import appStore from "./redux/appStore.js";
-import FirebaseContextProvider from "./utils/firebase.jsx";
+import FirebaseContextProvider from "./utils/firebaseContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
