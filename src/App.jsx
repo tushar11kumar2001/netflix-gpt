@@ -18,7 +18,7 @@ function App() {
   firebaseContext.authChanged();
   }, []);
   return (
-    <>
+    <div className="">
       <EmailContext.Provider value={{ email: email, setEmail: setEmail }}>
         <Routes>
           <Route path="/" element={<Login />} />,
@@ -30,7 +30,7 @@ function App() {
           <Route path="/browser" element={<Browser />} />
         </Routes>
       </EmailContext.Provider>
-    </>
+    </div>
   );
 }
 

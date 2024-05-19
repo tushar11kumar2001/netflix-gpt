@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Header2 from "./Header2";
 import { EmailContext } from "../../utils/emailContext";
 import { useContext } from "react";
