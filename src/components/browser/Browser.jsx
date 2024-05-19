@@ -11,25 +11,25 @@ import PrimaryContainer from "./PrimaryContainer";
 import { popularMoviesListThunks } from "../../redux/popularMoviesSlice";
 import { topRatedMoviesListThunk } from "../../redux/topRatedMoviesSlice";
 const Browser = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const userobj = useSelector((store) => store.user);
+  // const dispatch = useDispatch();
+  // const navigate = useNavigate();
+  // const userobj = useSelector((store) => store.user);
 
-  useEffect(() => { if (!userobj?.uid) navigate(ROOT.LOGIN) }, [userobj]);
-  useEffect(() => {
-    dispatch(nowPlayingMoviesListThunks());
-    dispatch(popularMoviesListThunks());
-    dispatch(topRatedMoviesListThunk());
-  }, [])
+  // useEffect(() => { if (!userobj?.uid) navigate(ROOT.LOGIN) }, [userobj]);
+  // useEffect(() => {
+  //   dispatch(nowPlayingMoviesListThunks());
+  //   dispatch(popularMoviesListThunks());
+  //   dispatch(topRatedMoviesListThunk());
+  // }, [])
 
 
 
 
   return (
     <div className="">
-      <Header userobj={userobj} />
+      {/* <Header userobj={userobj} />
       <PrimaryContainer />
-      <SecondaryContainer />
+      <SecondaryContainer /> */}
     </div>
   );
 };
