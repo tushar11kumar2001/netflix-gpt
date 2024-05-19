@@ -12,7 +12,7 @@ const VideoBackground = ({ id }) => {
 
 
   return (
-    <div className="overflow-hidden w-screen h-screen">
+    <div className="overflow-hidden w-screen h-screen ">
       {videoKey && <iframe 
       className="w-full h-[120%] relative top-[-50px]"  
       src={`https://www.youtube.com/embed/${videoKey}?autoplay=1&mute=1`} 

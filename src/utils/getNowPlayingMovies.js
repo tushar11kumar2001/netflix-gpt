@@ -33,7 +33,7 @@ export const trailer = async (id)=>{
     const data = await fetch(`https://api.themoviedb.org/3/movie/${id}/videos?`, API_option)
     const response = await data.json();
     const filterData = response.results.filter((movie)=>movie.type === "Trailer");
-    console.log(filterData);
+    // console.log(filterData);
      return filterData.length?filterData[0].key:response.results[0].key;
     
   } catch(e){

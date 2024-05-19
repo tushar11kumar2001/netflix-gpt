@@ -16,7 +16,7 @@ const PrimaryContainer = () => {
     setMainMovie(movies[idx]);
     if (mainMovie) logo(mainMovie.id).then((data) => { setImage(data) })
   }, [movies])
-
+  // console.log(image);
 
 
   return (

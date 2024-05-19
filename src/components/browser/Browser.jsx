@@ -8,24 +8,28 @@ import Header from "./Header";
 
 import SecondaryContainer from "./SecondaryContainer";
 import PrimaryContainer from "./PrimaryContainer";
+import { popularMoviesListThunks } from "../../redux/popularMoviesSlice";
+import { topRatedMoviesListThunk } from "../../redux/topRatedMoviesSlice";
 const Browser = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userobj = useSelector((store) => store.user);
 
   useEffect(() => { if (!userobj?.uid) navigate(ROOT.LOGIN) }, [userobj]);
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(nowPlayingMoviesListThunks());
-  },[])
+    dispatch(popularMoviesListThunks());
+    dispatch(topRatedMoviesListThunk());
+  }, [])
 
 
 
 
   return (
     <div className="">
-    <Header userobj={userobj}/>
-    <PrimaryContainer/>
-    <SecondaryContainer/>
+      <Header userobj={userobj} />
+      <PrimaryContainer />
+      <SecondaryContainer />
     </div>
   );
 };
